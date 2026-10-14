@@ -1,0 +1,97 @@
+{
+  "studio": {
+    "name": "JPG studio",
+    "tagline": "Thoughtful apps for everyday life.",
+    "email": "",
+    "socials": []
+  },
+  "home": {
+    "title": "Designing thoughtful apps for everyday life.",
+    "description": "We build useful, beautiful software products that help people be more organized, informed, and creative.",
+    "heroImage": "/images/home-hero.jpg",
+    "handwritten": "Small apps.\nA brighter everyday.",
+    "featuredSlug": "dailytodo"
+  },
+  "services": [
+    {
+      "icon": "apps",
+      "title": "Apps",
+      "description": "Thoughtful, high-quality apps for everyday life, across mobile and web platforms."
+    },
+    {
+      "icon": "chart",
+      "title": "Research Tools",
+      "description": "Tools for exploring data, uncovering insights, and making more informed decisions."
+    },
+    {
+      "icon": "pen",
+      "title": "Product Design",
+      "description": "Clean, intuitive designs that make complex ideas simple and delightful to use."
+    }
+  ],
+  "apps": [
+    {
+      "slug": "dailytodo",
+      "name": "DailyChecks",
+      "iconStyle": "todo",
+      "description": "A focused daily planning app for building consistency.",
+      "tags": [
+        "iOS",
+        "Productivity",
+        "Habit Building"
+      ],
+      "platform": "iOS",
+      "category": "Productivity",
+      "status": "In Progress",
+      "storeUrl": "",
+      "storeLabel": "Download on App Store",
+      "images": {
+        "icon": "/images/dailytodo/icon.png",
+        "hero": "/images/dailytodo/hero.png",
+        "caseStudy": "/images/dailytodo/case-study.png",
+        "iconCrop": true
+      },
+      "features": [
+        {
+          "icon": "calendar",
+          "title": "Plan your day",
+          "description": "Quickly capture your tasks and prioritize what matters."
+        },
+        {
+          "icon": "target",
+          "title": "Build habits",
+          "description": "Turn small actions into lasting habits with a clean, easy-to-use interface."
+        },
+        {
+          "icon": "chart",
+          "title": "Track progress",
+          "description": "See your progress with beautiful statistics and stay motivated every day."
+        }
+      ],
+      "screenshots": [
+        {
+          "title": "Plan your day",
+          "description": "A clear view of your day, with everything that matters.",
+          "image": "/images/dailytodo/screen-1.png",
+          "preview": "plan"
+        },
+        {
+          "title": "Track progress",
+          "description": "See your progress and stay motivated every day.",
+          "image": "/images/dailytodo/screen-2.png",
+          "preview": "stats"
+        },
+        {
+          "title": "Add tasks",
+          "description": "Create tasks in seconds and build better habits.",
+          "image": "/images/dailytodo/screen-3.png",
+          "preview": "task"
+        }
+      ],
+      "caseStudy": {
+        "headline": "A calmer way to build a more consistent you.",
+        "description": "DailyChecks is a focused daily planning app designed to help you prioritize what matters, build better habits, and make progress every day. A clean, intuitive experience for a more intentional life."
+      }
+    }
+  ]
+}
