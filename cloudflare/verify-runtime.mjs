@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+const base = process.argv[2] || 'http://127.0.0.1:8787';
+const request = (path, options) => fetch(new URL(path, base), options);
+const home = await request('/');
+assert.equal(home.status, 200);
+assert.match(home.headers.get('Content-Type'), /text\/html/);
+const html = await home.text();
+assert.doesNotMatch(html, /\/src\/|\.jsx/);
+const script = html.match(/<script[^>]+src="([^"]+\.js)"/)?.[1];
+assert.ok(script, 'Homepage must reference compiled JavaScript.');
+const module = await request(script);
+assert.equal(module.status, 200);
+assert.match(module.headers.get('Content-Type'), /(?:text|application)\/javascript/);
+assert.doesNotMatch(await module.text(), /^\s*(?:<!doctype|<html)/i);
+const site = await request('/api/site');
+assert.equal(site.status, 200);
+assert.match(site.headers.get('Content-Type'), /application\/json/);
+const content = await site.json();
+assert.equal(content.studio.name, 'JPG studio');
+assert.equal(content.apps[0].name, 'DailyChecks');
+const app = await request(`/api/apps/${content.apps[0].slug}`);
+assert.deepEqual(await app.json(), content.apps[0]);
+const detail = await request(`/apps/${content.apps[0].slug}`, {headers:{'Sec-Fetch-Mode':'navigate'}});
+assert.equal(detail.status, 200);
+assert.match(detail.headers.get('Content-Type'), /text\/html/);
+assert.match(await detail.text(), new RegExp(script.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+const icon = await request(content.apps[0].images.icon);
+assert.equal(icon.status, 200);
+assert.match(icon.headers.get('Content-Type'), /image\/png/);
+for (const path of ['/api/missing', '/src/main.jsx', '/assets/missing.js', '/images/missing.png']) {
+ const response = await request(path);
+ assert.equal(response.status, 404, `Missing resource must return 404: ${path}`);
+ assert.ok(!response.headers.get('Content-Type')?.includes('text/html'), `Missing resource must not be SPA HTML: ${path}`);
+}
+console.log(`Workers HTTP verification passed at ${base}: homepage, compiled JS MIME, site/app JSON, direct detail route, PNG icon, and four missing-resource cases.`);

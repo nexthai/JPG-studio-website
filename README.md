@@ -2,6 +2,65 @@
 
 React + JavaScript 前端，Python 标准库后端。根据两张参考图搭建首页、App 详情页、响应式布局和截图画廊。
 
+## Cloudflare Workers 部署（已添加兼容配置）
+
+线上报错的原因是发布了 `frontend/index.html`，它引用开发入口 `/src/main.jsx`。浏览器不能直接执行 JSX。Workers 必须发布 `frontend/dist` 中经过 Vite 编译的网页，不能把源码文件的 MIME 强行改成 JavaScript。
+
+项目根目录现在包含 `package.json`、`package-lock.json` 和 `wrangler.jsonc`。Wrangler 自动构建前端、核对部署入口，然后只上传 `frontend/dist`，Worker 名称为 `jpg-studio-website`。
+
+### Cloudflare 控制台连接 Git 仓库
+
+| 设置 | 值 |
+| --- | --- |
+| 根目录 | 仓库根目录，包含 `wrangler.jsonc`；不要设为 `frontend` 或 `frontend/src` |
+| 构建命令 | 留空；`wrangler.jsonc` 的自定义构建会自动执行 `npm run build` |
+| 部署命令 | `npm run deploy` |
+| Node.js | 22.12+；可将 `NODE_VERSION` 设为 `22` |
+| 静态资源目录 | 已在配置中固定为 `./frontend/dist` |
+
+先把本次修改提交到连接的 Git 仓库，再触发 Cloudflare 重新部署。不要沿用上传 `frontend` 源码目录的方式。
+
+### 本地使用 CLI 部署
+
+```bash
+cd /Users/yul/Desktop/test/website
+npm ci
+npx wrangler login
+npm run deploy
+```
+
+`npm run deploy` 会自动调用构建，无需手动上传目录。登录应使用拥有 `jpg-studio-website` 的同一 Cloudflare 账号。
+
+### 本地模拟 Workers
+
+```bash
+cd /Users/yul/Desktop/test/website
+npm ci
+npm run preview:cloudflare
+```
+
+打开 http://127.0.0.1:8787 。在另一个终端运行：
+
+```bash
+cd /Users/yul/Desktop/test/website
+npm test
+npm run test:cloudflare-runtime
+```
+
+不发布线上网站的打包验证：
+
+```bash
+npx wrangler deploy --dry-run --outdir .wrangler/dry-run
+```
+
+### Python 后端与 Workers 接口
+
+本地仍使用 `backend/server.py`。Workers 使用 `cloudflare/worker.js` 提供相同的 `/api/site` 和 `/api/apps/:slug` 接口，读取同一份 `backend/data/site.json`。Cloudflare 不会启动本项目的 Python HTTP 服务器。
+
+文案、图片或 JSON 修改后需要重新部署；JSON 会随 Worker 打包，线上不依赖你的电脑或 `127.0.0.1:8000`。
+
+官方参考：[静态资源配置](https://developers.cloudflare.com/workers/static-assets/binding/)、[SPA 路由](https://developers.cloudflare.com/workers/static-assets/routing/single-page-application/)、[Wrangler 自定义构建](https://developers.cloudflare.com/workers/wrangler/custom-builds/)。
+
 ## 启动开发模式
 
 需要 Node.js 20.19+（或 22.12+）和 Python 3.10+。

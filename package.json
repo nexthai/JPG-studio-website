@@ -1,0 +1,20 @@
+{
+  "name": "jpg-studio-cloudflare",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "npm --prefix frontend ci && npm --prefix frontend run build && npm run check:cloudflare",
+    "check:cloudflare": "node cloudflare/check-build.mjs",
+    "test": "node --test cloudflare/tests/*.test.mjs",
+    "preview:cloudflare": "wrangler dev --local --port 8787",
+    "deploy": "wrangler deploy",
+    "test:cloudflare-runtime": "node cloudflare/verify-runtime.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.0"
+  }
+}
