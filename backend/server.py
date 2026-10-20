@@ -46,7 +46,9 @@ class Handler(BaseHTTPRequestHandler):
         target = (DIST / path.lstrip('/')).resolve()
         if not target.is_relative_to(DIST.resolve()):
             return self.send_json(404, {'error': 'Not found'})
-        if path == '/' or (path.startswith('/apps/') and '.' not in path):
+        if path.rstrip('/') == '/apps/dailytodo/privacy':
+            target = DIST / 'apps' / 'dailytodo' / 'privacy.html'
+        elif path == '/' or (path.startswith('/apps/') and '.' not in path):
             target = DIST / 'index.html'
         if target.is_file():
             return self.send_body(200, target.read_bytes(), mimetypes.guess_type(target)[0] or 'application/octet-stream')

@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "jpg-studio-website",
+  "name": "jpg-studio",
   "main": "cloudflare/worker.js",
   "compatibility_date": "2026-10-14",
   "workers_dev": true,

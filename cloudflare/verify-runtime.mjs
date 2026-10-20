@@ -24,6 +24,13 @@ const detail = await request(`/apps/${content.apps[0].slug}`, {headers:{'Sec-Fet
 assert.equal(detail.status, 200);
 assert.match(detail.headers.get('Content-Type'), /text\/html/);
 assert.match(await detail.text(), new RegExp(script.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+const privacy = await request('/apps/dailytodo/privacy', {headers:{'Sec-Fetch-Mode':'navigate'}});
+assert.equal(privacy.status, 200);
+assert.match(privacy.headers.get('Content-Type'), /text\/html/);
+const policy = await privacy.text();
+assert.match(policy, /PRIVACY POLICY/);
+assert.match(policy, /12\. HOW CAN YOU REVIEW, UPDATE, OR DELETE/);
+assert.doesNotMatch(policy, /type="module"/);
 const icon = await request(content.apps[0].images.icon);
 assert.equal(icon.status, 200);
 assert.match(icon.headers.get('Content-Type'), /image\/png/);
@@ -32,4 +39,4 @@ for (const path of ['/api/missing', '/src/main.jsx', '/assets/missing.js', '/ima
  assert.equal(response.status, 404, `Missing resource must return 404: ${path}`);
  assert.ok(!response.headers.get('Content-Type')?.includes('text/html'), `Missing resource must not be SPA HTML: ${path}`);
 }
-console.log(`Workers HTTP verification passed at ${base}: homepage, compiled JS MIME, site/app JSON, direct detail route, PNG icon, and four missing-resource cases.`);
+console.log(`Workers HTTP verification passed at ${base}: homepage, compiled JS MIME, site/app JSON, direct detail/privacy routes, PNG icon, and four missing-resource cases.`);

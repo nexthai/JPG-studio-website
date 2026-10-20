@@ -91,7 +91,8 @@
       "caseStudy": {
         "headline": "A calmer way to build a more consistent you.",
         "description": "DailyChecks is a focused daily planning app designed to help you prioritize what matters, build better habits, and make progress every day. A clean, intuitive experience for a more intentional life."
-      }
+      },
+      "privacyUrl": "/apps/dailytodo/privacy"
     }
   ]
 }

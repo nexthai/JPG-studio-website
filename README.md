@@ -6,7 +6,7 @@ React + JavaScript 前端，Python 标准库后端。根据两张参考图搭建
 
 线上报错的原因是发布了 `frontend/index.html`，它引用开发入口 `/src/main.jsx`。浏览器不能直接执行 JSX。Workers 必须发布 `frontend/dist` 中经过 Vite 编译的网页，不能把源码文件的 MIME 强行改成 JavaScript。
 
-项目根目录现在包含 `package.json`、`package-lock.json` 和 `wrangler.jsonc`。Wrangler 自动构建前端、核对部署入口，然后只上传 `frontend/dist`，Worker 名称为 `jpg-studio-website`。
+项目根目录现在包含 `package.json`、`package-lock.json` 和 `wrangler.jsonc`。Wrangler 自动构建前端、核对部署入口，然后只上传 `frontend/dist`，Worker 名称为 `jpg-studio`。
 
 ### Cloudflare 控制台连接 Git 仓库
 
@@ -29,7 +29,7 @@ npx wrangler login
 npm run deploy
 ```
 
-`npm run deploy` 会自动调用构建，无需手动上传目录。登录应使用拥有 `jpg-studio-website` 的同一 Cloudflare 账号。
+`npm run deploy` 会自动调用构建，无需手动上传目录。登录应使用拥有 `jpg-studio` 的同一 Cloudflare 账号。
 
 ### 本地模拟 Workers
 
@@ -154,3 +154,12 @@ npm run build
 
 当前 DailyChecks 图标使用上传的概念图，`apps[].images.iconCrop: true` 会在网页中裁去外围留白与 Concept A 标签，不修改原图。以后更换为标准正方形图标时，将此值设为 `false` 或删除即可。
 # JPG-studio-website
+
+## DailyChecks 隐私政策
+
+- 正式地址：`https://jpg-studio.ha1t1an.workers.dev/apps/dailytodo/privacy`
+- App 详情页底部有 `Privacy` 链接。
+- HTML 文件：`frontend/public/apps/dailytodo/privacy.html`，构建时复制到 `frontend/dist/apps/dailytodo/privacy.html`。
+- 提供的政策正文完整保留，包括原始样式、目录锚点、外部链接、Termly 署名，以及主体名称/邮寄地址的三处 `__________` 占位文字。
+- 使用独立 HTML；直接访问不依赖 React 或 `/api/site`，本地 Python 与 Cloudflare Workers 均可访问。
+- Workers 名称已按最新正式地址配置为 `jpg-studio`。更新内容后需重新部署。

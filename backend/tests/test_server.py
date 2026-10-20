@@ -41,6 +41,17 @@ class ServerContract(unittest.TestCase):
         for app in site['apps']:
             self.assertEqual(self.get_json('/api/apps/' + app['slug']), app)
 
+    def test_privacy_page_serves_complete_policy_instead_of_spa_shell(self):
+        with urlopen(self.base + '/apps/dailytodo/privacy') as response:
+            self.assertEqual(response.status, 200)
+            self.assertIn('text/html', response.headers.get('Content-Type'))
+            html = response.read().decode('utf-8')
+        self.assertIn('PRIVACY POLICY', html)
+        self.assertIn('DailyChecks - Track Daily Wins', html)
+        self.assertIn('12. HOW CAN YOU REVIEW, UPDATE, OR DELETE', html)
+        self.assertIn('nexthaitian@gmail.com', html)
+        self.assertNotIn('type="module"', html)
+
     def test_unknown_app_returns_json_404(self):
         with self.assertRaises(HTTPError) as error:
             urlopen(self.base + '/api/apps/does-not-exist')
